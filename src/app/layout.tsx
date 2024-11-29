@@ -13,8 +13,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // suppressHydrationWarning foi incluido porque a extensão do chrome Colorzilla estava incluindo o codigo cz-shortcut-listen=true no html e o Next estava reclamando, o erro não causa nada no projeto
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

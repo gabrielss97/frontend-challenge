@@ -12,7 +12,9 @@ export default function Home() {
         </h1>
 
         <div className="bg-white shadow-sm rounded-lg p-6 mb-12">
-          <h2 className="text-xl font-semibold mb-4">Enviar nova imagem</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Faça upload das suas imagens abaixo
+          </h2>
           <ImageUpload />
         </div>
 
