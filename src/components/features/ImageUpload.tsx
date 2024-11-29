@@ -18,6 +18,11 @@ export function ImageUpload() {
   const { mutateAsync: getSignedUrl } = useSignedUrl();
   const { mutateAsync: saveImage } = useSaveImage();
 
+  // tive que dar um split no url porque com o link completo, o next não conseguia carregar a imagem usando o Image
+  const getBaseUrl = (url: string) => {
+    return url.split("?")[0];
+  };
+
   const {
     register,
     handleSubmit,
@@ -48,8 +53,9 @@ export function ImageUpload() {
         throw new Error("Failed to upload to signed URL");
       }
 
+      const baseUrl = getBaseUrl(signedUrlResponse.url);
       await saveImage({
-        url: signedUrlResponse.url,
+        url: baseUrl,
       });
 
       await queryClient.invalidateQueries({ queryKey: ["images"] });
