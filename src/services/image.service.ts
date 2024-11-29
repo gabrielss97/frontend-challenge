@@ -1,9 +1,9 @@
+import { GALLERY } from "@/utils/constants";
 import { api } from "./api";
 import {
   SignedUrlRequest,
   SignedUrlResponse,
   SaveImageRequest,
-  SaveImageResponse,
   ImagesListResponse,
   GetImagesParams,
 } from "./types/image";
@@ -14,9 +14,8 @@ export const imageService = {
     return response.data;
   },
 
-  saveImage: async (data: SaveImageRequest): Promise<SaveImageResponse> => {
-    const response = await api.post<SaveImageResponse>("/api/v1/images", data);
-    return response.data;
+  saveImage: async (data: SaveImageRequest): Promise<void> => {
+    await api.post("/api/v1/images", data);
   },
 
   getImages: async (
@@ -24,7 +23,7 @@ export const imageService = {
   ): Promise<ImagesListResponse> => {
     const response = await api.get<ImagesListResponse>("/api/v1/images", {
       params: {
-        page_size: params.page_size || 12,
+        page_size: params.page_size || GALLERY.PAGE_SIZE,
         page_token: params.page_token,
       },
     });

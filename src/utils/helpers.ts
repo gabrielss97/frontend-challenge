@@ -7,13 +7,6 @@ export async function uploadToSignedUrl(
     throw new Error("No signed URL provided");
   }
 
-  console.log("Attempting to upload to:", signedUrl);
-  console.log("File:", {
-    name: file.name,
-    type: file.type,
-    size: file.size,
-  });
-
   try {
     const response = await fetch(signedUrl, {
       method: "PUT",

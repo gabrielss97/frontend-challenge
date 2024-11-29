@@ -6,12 +6,15 @@ import { Button } from "@/components/ui/Button";
 import { useSignedUrl } from "@/hooks/useSignedUrl";
 import { useSaveImage } from "@/hooks/useSaveImage";
 import { uploadToSignedUrl } from "@/utils/helpers";
+import { useQueryClient } from "@tanstack/react-query";
+import { IMAGE_UPLOAD } from "@/utils/constants";
 
 interface UploadFormData {
   image: FileList;
 }
 
 export function ImageUpload() {
+  const queryClient = useQueryClient();
   const { mutateAsync: getSignedUrl } = useSignedUrl();
   const { mutateAsync: saveImage } = useSaveImage();
 
@@ -27,14 +30,10 @@ export function ImageUpload() {
       const file = data.image[0];
       if (!file) return;
 
-      console.log("Starting upload process for file:", file.name);
-
       const signedUrlResponse = await getSignedUrl({
         mimetype: file.type,
         file_name: file.name,
       });
-
-      console.log("Signed URL Response:", signedUrlResponse);
 
       if (!signedUrlResponse.url) {
         throw new Error("No URL in response");
@@ -49,11 +48,11 @@ export function ImageUpload() {
         throw new Error("Failed to upload to signed URL");
       }
 
-      console.log("Upload successful, saving image reference");
+      await saveImage({
+        url: signedUrlResponse.url,
+      });
 
-      await saveImage({ url: signedUrlResponse.url });
-
-      console.log("Image reference saved");
+      await queryClient.invalidateQueries({ queryKey: ["images"] });
 
       reset();
     } catch (error) {
@@ -67,20 +66,21 @@ export function ImageUpload() {
         type="file"
         accept="image/*"
         {...register("image", {
-          required: "Image is required",
+          required: IMAGE_UPLOAD.ERROR_MESSAGES.REQUIRED,
           validate: {
             acceptedFormats: (files) =>
               files[0]?.type.startsWith("image/") ||
-              "Only image files are allowed",
+              IMAGE_UPLOAD.ERROR_MESSAGES.INVALID_TYPE,
             maxSize: (files) =>
-              files[0]?.size <= 5000000 || "Image must be less than 5MB",
+              files[0]?.size <= IMAGE_UPLOAD.MAX_SIZE ||
+              IMAGE_UPLOAD.ERROR_MESSAGES.MAX_SIZE,
           },
         })}
         error={errors.image?.message}
       />
 
       <Button type="submit" isLoading={isSubmitting}>
-        Upload Image
+        Enviar nova imagem
       </Button>
     </form>
   );

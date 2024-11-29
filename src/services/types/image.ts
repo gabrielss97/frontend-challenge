@@ -11,16 +11,6 @@ export interface SaveImageRequest {
   url: string;
 }
 
-export interface SaveImageResponse {
-  id?: string;
-  url: string;
-}
-
-export interface ImageResponse {
-  id?: string;
-  url: string;
-}
-
 export interface ImageItem {
   url: string;
   created_at: string;
@@ -28,10 +18,10 @@ export interface ImageItem {
 }
 
 export interface ImagesListResponse {
-  page_token?: string;
-  total_items: number;
-  page_size?: number;
   items: ImageItem[];
+  total_items: number;
+  page_token: string;
+  page_size: number;
 }
 
 export interface GetImagesParams {

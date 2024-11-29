@@ -13,6 +13,3 @@ export const api = axios.create({
     Authorization: `Bearer ${TOKEN}`,
   },
 });
-
-console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
-console.log("Token exists:", !!process.env.NEXT_PUBLIC_API_TOKEN);

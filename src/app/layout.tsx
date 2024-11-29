@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
-import { QueryProvider } from "@/providers/query-provider";
+import { QueryProvider } from "@/providers/queryProvider";
 
 export const metadata: Metadata = {
   title: "Frontend Challenge",
-  description: "Upload your files and get a link to share them",
+  description: "Envie suas imagens e compartilhe o link",
 };
 
 export default function RootLayout({

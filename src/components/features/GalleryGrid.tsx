@@ -3,6 +3,8 @@
 import { useGallery } from "@/hooks/useGallery";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
+import { ImageCard } from "./ImageCard";
+import { GALLERY } from "@/utils/constants";
 
 export function GalleryGrid() {
   const {
@@ -12,7 +14,7 @@ export function GalleryGrid() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useGallery(12);
+  } = useGallery(GALLERY.PAGE_SIZE);
 
   const { ref, inView } = useInView();
 
@@ -25,47 +27,40 @@ export function GalleryGrid() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <div className="animate-pulse">Carregando imagens...</div>
+        <div className="animate-pulse">{GALLERY.LOADING_MESSAGE}</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-red-500 text-center">Erro ao carregar imagens</div>
+      <div className="text-red-500 text-center">{GALLERY.ERROR_MESSAGE}</div>
     );
   }
 
   if (!data?.pages[0].items.length) {
     return (
-      <div className="text-center text-gray-500">Nenhuma imagem encontrada</div>
+      <div className="text-center text-gray-500 py-8">
+        {GALLERY.EMPTY_MESSAGE}
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.pages.map((page) =>
-          page.items.map((image) => (
-            <div
-              key={image.url}
-              className="aspect-square rounded-lg overflow-hidden"
-            >
-              <img
-                src={image.url}
-                alt=""
-                className="w-full h-full object-cover hover:scale-105 transition-transform"
-              />
-            </div>
+          page.items.map((image, index) => (
+            <ImageCard key={image.url} image={image} priority={index < 4} />
           ))
         )}
       </div>
 
-      <div ref={ref} className="mt-4">
+      <div ref={ref} className="flex justify-center">
         {isFetchingNextPage && (
-          <div className="text-center py-4">Carregando mais imagens...</div>
+          <div className="text-center py-4">{GALLERY.LOADING_MORE_MESSAGE}</div>
         )}
       </div>
-    </>
+    </div>
   );
 }
