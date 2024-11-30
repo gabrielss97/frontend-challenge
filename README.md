@@ -10,6 +10,6 @@ cp .env.example .env.local
 3. As variáveis padrão já estão configuradas e prontas para uso
 
 ```bash
-NEXT_PUBLIC_API_TOKEN=Gabriel-Salvador
+NEXT_PUBLIC_API_TOKEN=frontend-challenge-gabriel-salvador
 NEXT_PUBLIC_API_URL=https://frontend-challenge-backend-842303020925.us-east1.run.app
 ```
