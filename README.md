@@ -16,25 +16,9 @@ Antes de começar, você precisa ter instalado em sua máquina:
 - Node.js (versão 18.0 ou superior)
 - npm ou yarn
 
-## 🔧 Instalação
-
-1. Clone o repositório
-
 # Configuração do Ambiente
 
 1. Clone o repositório
-2. Copie o arquivo de ambiente:
-
-```bash
-cp .env.example .env.local
-```
-
-3. As variáveis padrão já estão configuradas e prontas para uso
-
-```bash
-NEXT_PUBLIC_API_TOKEN=frontend-challenge-gabriel-salvador
-NEXT_PUBLIC_API_URL=https://frontend-challenge-backend-842303020925.us-east1.run.app
-```
 
 2. Entre no diretório do projeto
 
@@ -50,7 +34,20 @@ npm install
 yarn install
 ```
 
-4. Inicie o servidor de desenvolvimento
+4. Copie o arquivo de ambiente:
+
+```bash
+cp .env.example .env.local
+```
+
+5. As variáveis padrão já estão configuradas e prontas para uso
+
+```bash
+NEXT_PUBLIC_API_TOKEN=frontend-challenge-gabriel-salvador
+NEXT_PUBLIC_API_URL=https://frontend-challenge-backend-842303020925.us-east1.run.app
+```
+
+6. Inicie o servidor de desenvolvimento
 
 ```bash
 npm run dev
