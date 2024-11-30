@@ -1,11 +1,16 @@
-import type { Metadata } from "next";
-import "../styles/globals.css";
+"use client";
+
+import { Roboto } from "next/font/google";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { theme } from "@/styles/theme";
 import { QueryProvider } from "@/providers/queryProvider";
 
-export const metadata: Metadata = {
-  title: "Frontend Challenge",
-  description: "Envie suas imagens e compartilhe o link",
-};
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -13,10 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // suppressHydrationWarning foi incluido porque a extensão do chrome Colorzilla estava incluindo o codigo cz-shortcut-listen=true no html e o Next estava reclamando, o erro não causa nada no projeto
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={roboto.className}>
       <body suppressHydrationWarning>
-        <QueryProvider>{children}</QueryProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <QueryProvider>{children}</QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

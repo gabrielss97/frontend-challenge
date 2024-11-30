@@ -2,9 +2,9 @@ export const IMAGE_UPLOAD = {
   MAX_SIZE: 5000000, // 5MB em bytes
   ACCEPTED_TYPES: ["image/jpeg", "image/png", "image/gif", "image/webp"],
   ERROR_MESSAGES: {
-    INVALID_TYPE: "Only image files are allowed",
-    MAX_SIZE: "Image must be less than 5MB",
-    REQUIRED: "Image is required",
+    INVALID_TYPE: "Apenas imagens são permitidas",
+    MAX_SIZE: "Imagem tem que ser menor que 5mb",
+    REQUIRED: "Escolha uma imagem",
   },
 } as const;
 

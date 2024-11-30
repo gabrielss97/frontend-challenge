@@ -1,28 +1,69 @@
 "use client";
 
-import { ImageUpload } from "@/components/features/ImageUpload";
-import { GalleryGrid } from "@/components/features/GalleryGrid";
+import { ImageUpload } from "@/components/ImageUpload";
+import { GalleryGrid } from "@/components/GalleryGrid";
+import { Container, Paper, Typography, Box } from "@mui/material";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: "linear-gradient(180deg, #121214 0%, #17171A 100%)",
+        py: 4,
+      }}
+    >
+      <Container maxWidth="lg">
+        <Typography
+          variant="h3"
+          component="h1"
+          sx={{
+            mb: 4,
+            fontWeight: "bold",
+            color: "primary.main",
+          }}
+        >
           Frontend Challenge
-        </h1>
+        </Typography>
 
-        <div className="bg-white shadow-sm rounded-lg p-6 mb-12">
-          <h2 className="text-xl font-semibold mb-4">
-            Faça upload das suas imagens abaixo
-          </h2>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            mb: 6,
+            borderRadius: 2,
+            bgcolor: "dark.light",
+          }}
+        >
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              mb: 3,
+              fontWeight: 600,
+              color: "text.primary",
+            }}
+          >
+            Enviar nova imagem
+          </Typography>
           <ImageUpload />
-        </div>
+        </Paper>
 
-        <div className="mt-8">
-          <h2 className="text-xl font-semibold mb-6">Suas imagens</h2>
+        <Box sx={{ mt: 6 }}>
+          <Typography
+            variant="h5"
+            component="h2"
+            sx={{
+              mb: 3,
+              fontWeight: 600,
+              color: "text.primary",
+            }}
+          >
+            Suas imagens
+          </Typography>
           <GalleryGrid />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Container>
+    </Box>
   );
 }
