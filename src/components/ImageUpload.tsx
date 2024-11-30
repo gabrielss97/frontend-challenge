@@ -130,7 +130,7 @@ export function ImageUpload() {
         throw new Error("Failed to upload to signed URL");
       }
 
-      // Remove os parâmetros de query da URL assinada do Google Storage
+      // Remove os parâmetros de query da URL do Google Storage
       // Isso é necessário porque o Next Image component precisa de uma URL limpa
       // para funcionar corretamente com o domínio configurado
       const baseUrl = signedUrlResponse.url.split("?")[0];
@@ -162,13 +162,22 @@ export function ImageUpload() {
               borderColor: "primary.light",
               bgcolor: "rgba(153, 86, 246, 0.04)",
             },
+            position: "relative",
           }}
         >
           <input
             id="image-upload"
             type="file"
             accept="image/*"
-            style={{ display: "none" }}
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              opacity: 0,
+            }}
             ref={ref}
             onChange={handleImageChange}
             {...inputProps}

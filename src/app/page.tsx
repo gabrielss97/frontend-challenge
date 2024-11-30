@@ -9,7 +9,7 @@ export default function Home() {
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(180deg, #121214 0%, #17171A 100%)",
+        background: "rgb(19 19 21)",
         py: 4,
       }}
     >

@@ -2,22 +2,32 @@
 
 import { useGallery } from "@/hooks/useGallery";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ImageCard } from "./ImageCard";
 import { GALLERY } from "@/utils/constants";
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 import { ImageItem } from "@/services/types/image";
 
-const LoadingState = () => (
+const LoadingState = ({ visible }: { visible: boolean }) => (
   <Box
     sx={{
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      minHeight: 200,
+      height: "80vh",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgb(19 19 21)",
+      zIndex: 1,
+      transition: "opacity 0.3s ease-in-out",
+      opacity: visible ? 1 : 0,
+      pointerEvents: visible ? "auto" : "none",
     }}
   >
-    <CircularProgress sx={{ color: "primary.main" }} />
+    <CircularProgress sx={{ color: "primary.main", marginTop: "-900px" }} />
   </Box>
 );
 
@@ -48,10 +58,13 @@ interface ImageGridProps {
 
 const ImageGrid = ({ items }: ImageGridProps) => (
   <Grid container spacing={2}>
-    {items.map((page) =>
-      page.map((image, index) => (
+    {items.map((page, pageIndex) =>
+      page.map((image, imageIndex) => (
         <Grid item xs={12} sm={6} md={4} key={image.url}>
-          <ImageCard image={image} priority={index < 4} />
+          <ImageCard
+            image={image}
+            priority={pageIndex === 0 && imageIndex < 8}
+          />
         </Grid>
       ))
     )}
@@ -68,6 +81,8 @@ export function GalleryGrid() {
     isFetchingNextPage,
   } = useGallery(GALLERY.PAGE_SIZE);
 
+  const [showLoading, setShowLoading] = useState(true);
+
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -76,16 +91,39 @@ export function GalleryGrid() {
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
-  if (isLoading) return <LoadingState />;
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setShowLoading(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoading(true);
+    }
+  }, [isLoading]);
+
   if (error) return <ErrorMessage />;
-  if (!data?.pages[0].items.length) return <EmptyState />;
+  if (!isLoading && data?.pages[0]?.items.length === 0) return <EmptyState />;
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      <ImageGrid items={data.pages.map((page) => page.items)} />
+    <Box sx={{ position: "relative" }}>
+      <LoadingState visible={showLoading} />
 
-      <Box ref={ref} sx={{ display: "flex", justifyContent: "center" }}>
-        {isFetchingNextPage && <LoadingMore />}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 4,
+          opacity: showLoading ? 0.3 : 1,
+          transition: "opacity 0.3s ease-in-out",
+        }}
+      >
+        {data && <ImageGrid items={data.pages.map((page) => page.items)} />}
+
+        <Box ref={ref} sx={{ display: "flex", justifyContent: "center" }}>
+          {isFetchingNextPage && <LoadingMore />}
+        </Box>
       </Box>
     </Box>
   );
