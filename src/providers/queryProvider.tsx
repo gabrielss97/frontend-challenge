@@ -10,10 +10,15 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
+            // Tempo que os dados permanecem "frescos" antes de precisar revalidar
             staleTime: Infinity,
+            // Tempo que os dados ficam em cache antes de serem removidos
             gcTime: Infinity,
+            // Desabilita revalidação automática quando a janela ganha foco
             refetchOnWindowFocus: false,
+            // Desabilita revalidação automática quando o componente é montado
             refetchOnMount: false,
+            // Desabilita revalidação automática quando a conexão é reestabelecida
             refetchOnReconnect: false,
           },
         },

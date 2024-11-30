@@ -79,6 +79,7 @@ export function GalleryGrid() {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    isFetching,
   } = useGallery(GALLERY.PAGE_SIZE);
 
   const [showLoading, setShowLoading] = useState(true);
@@ -92,7 +93,7 @@ export function GalleryGrid() {
   }, [inView, hasNextPage, fetchNextPage]);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && !isFetching) {
       const timer = setTimeout(() => {
         setShowLoading(false);
       }, 1000);
@@ -101,7 +102,7 @@ export function GalleryGrid() {
     } else {
       setShowLoading(true);
     }
-  }, [isLoading]);
+  }, [isLoading, isFetching]);
 
   if (error) return <ErrorMessage />;
   if (!isLoading && data?.pages[0]?.items.length === 0) return <EmptyState />;
