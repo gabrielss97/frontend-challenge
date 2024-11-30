@@ -8,7 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { IMAGE_UPLOAD } from "@/utils/constants";
 import { Box, Button, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState, DragEvent } from "react";
+import { useState } from "react";
 
 interface UploadFormData {
   image: FileList;
@@ -63,7 +63,6 @@ const ErrorMessage = ({ message }: ErrorMessageProps) => (
 
 export function ImageUpload() {
   const [preview, setPreview] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
   const queryClient = useQueryClient();
   const { mutateAsync: getSignedUrl } = useSignedUrl();
   const { mutateAsync: saveImage } = useSaveImage();
@@ -73,19 +72,10 @@ export function ImageUpload() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    setValue,
   } = useForm<UploadFormData>();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFile(file);
-    }
-  };
-
-  const { ...inputProps } = register("image", {
+  const { ref, onChange, ...inputProps } = register("image", {
     required: IMAGE_UPLOAD.ERROR_MESSAGES.REQUIRED,
-    onChange: handleImageChange,
     validate: {
       acceptedFormats: (files) =>
         files[0]?.type.startsWith("image/") ||
@@ -96,45 +86,18 @@ export function ImageUpload() {
     },
   });
 
-  const handleFile = (file: File) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e);
+
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
-
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      setValue("image", dataTransfer.files, { shouldValidate: true });
-    }
-  };
-
-  const handleDragEnter = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-
-    const file = e.dataTransfer.files?.[0];
-    if (file) {
-      handleFile(file);
+    } else {
+      setPreview(null);
     }
   };
 
@@ -187,23 +150,14 @@ export function ImageUpload() {
         <Box
           component="label"
           htmlFor="image-upload"
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
           sx={{
             border: "2px dashed",
-            borderColor: isDragging
-              ? "primary.light"
-              : errors.image
-              ? "error.main"
-              : "primary.main",
+            borderColor: errors.image ? "error.main" : "primary.main",
             borderRadius: 1,
             p: 3,
             textAlign: "center",
             cursor: "pointer",
             transition: "all 0.2s",
-            bgcolor: isDragging ? "rgba(153, 86, 246, 0.04)" : "transparent",
             "&:hover": {
               borderColor: "primary.light",
               bgcolor: "rgba(153, 86, 246, 0.04)",
@@ -215,13 +169,15 @@ export function ImageUpload() {
             type="file"
             accept="image/*"
             style={{ display: "none" }}
+            ref={ref}
+            onChange={handleImageChange}
             {...inputProps}
           />
 
           {preview ? <ImagePreview src={preview} /> : <UploadPlaceholder />}
         </Box>
 
-        {errors.image && <ErrorMessage message={errors.image.message} />}
+        {errors.image && <ErrorMessage message={errors.image.message || ""} />}
 
         <Button
           type="submit"
