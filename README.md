@@ -2,6 +2,51 @@
 
 Uma aplicação web para envio e listagem de imagens usando Next.js, TypeScript, MUI e React Query.
 
+## Estrutura do Projeto
+
+```mermaid
+graph TD
+    A[Frontend Challenge] --> B[src]
+    B --> C[app]
+    B --> D[components]
+    B --> E[hooks]
+    B --> F[providers]
+    B --> G[services]
+    B --> H[styles]
+    B --> I[utils]
+
+    C --> C1[layout.tsx]
+    C --> C2[page.tsx]
+
+    D --> D1[ImageUpload.tsx]
+    D --> D2[ImageCard.tsx]
+    D --> D3[GalleryGrid.tsx]
+
+    E --> E1[useGallery.ts]
+    E --> E2[useSaveImage.ts]
+    E --> E3[useSignedUrl.ts]
+
+    F --> F1[queryProvider.tsx]
+
+    G --> G1[api.ts]
+    G --> G2[image.service.ts]
+    G --> G3[types/]
+    G3 --> G3A[image.ts]
+
+    H --> H1[globals.css]
+    H --> H2[theme.ts]
+
+    I --> I1[constants.ts]
+    I --> I2[helpers.ts]
+
+    K[Configurações]
+    K --> K1[next.config.ts]
+    K --> K2[tsconfig.json]
+    K --> K3[tailwind.config.ts]
+    K --> K4[postcss.config.mjs]
+    K --> K5[.env.local]
+```
+
 ## 🚀 Tecnologias Utilizadas
 
 - Next.js
